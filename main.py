@@ -8,6 +8,22 @@ import time
 
 app = FastAPI()
 
+def init_db():
+    conn = sqlite3.connect("app.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS snippets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            code_block TEXT NOT NULL,
+            tag TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
