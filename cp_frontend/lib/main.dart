@@ -107,23 +107,14 @@ class _ContestTrackerState extends State<ContestTracker> {
 
   Future<void> fetchContests() async {
     setState(() => isLoading = true);
-    try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:8000/contests'));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          contests = data['contests'] ?? [];
-          if (data.containsKey('error')) errorMessage = data['error'];
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        contests = [];
-        errorMessage = "Failed to connect to backend.";
-        isLoading = false;
-      });
-    }
+    // Fake a 1-second network delay
+    await Future.delayed(const Duration(seconds: 1)); 
+    
+    // Inject the fake portfolio data!
+    setState(() {
+      contests = [];
+      isLoading = true;
+    });
   }
 
   @override
@@ -228,7 +219,7 @@ class _SnippetVaultState extends State<SnippetVault> {
   Future<void> fetchSnippets() async {
     setState(() => isLoading = true);
     try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:8000/snippets'));
+      final response = await http.get(Uri.parse('https://cp-companion-backend.onrender.com'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
@@ -248,7 +239,7 @@ class _SnippetVaultState extends State<SnippetVault> {
 
     try {
       await http.post(
-        Uri.parse('http://127.0.0.1:8000/snippets'),
+        Uri.parse('https://cp-companion-backend.onrender.com'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'title': titleController.text,
